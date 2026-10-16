@@ -10,7 +10,7 @@ import {
   Toast,
   useNavigation,
 } from "@raycast/api";
-import { useCachedPromise, usePromise } from "@raycast/utils";
+import { showFailureToast, useCachedPromise, usePromise } from "@raycast/utils";
 import { useEffect, useState } from "react";
 import { AddAliasForm } from "./add-alias";
 import {
@@ -118,9 +118,7 @@ export function RulesList({
       toast.style = Toast.Style.Success;
       toast.title = added ? `Added ${site.host}` : `${site.host} is already added`;
     } catch (error) {
-      toast.style = Toast.Style.Failure;
-      toast.title = `Could not add ${site.host}`;
-      toast.message = error instanceof Error ? error.message : undefined;
+      await showFailureToast(error, { title: `Could not add ${site.host}` });
     }
   };
 
@@ -161,9 +159,7 @@ export function RulesList({
       toast.style = Toast.Style.Success;
       toast.title = "Removed";
     } catch (error) {
-      toast.style = Toast.Style.Failure;
-      toast.title = "Could not remove";
-      toast.message = error instanceof Error ? error.message : undefined;
+      await showFailureToast(error, { title: "Could not remove" });
     }
   };
 

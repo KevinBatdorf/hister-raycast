@@ -14,7 +14,7 @@ import {
   showToast,
   Toast,
 } from "@raycast/api";
-import { useCachedPromise } from "@raycast/utils";
+import { showFailureToast, useCachedPromise } from "@raycast/utils";
 import { useEffect, useRef, useState } from "react";
 import {
   deleteDocument,
@@ -205,9 +205,7 @@ export default function Command() {
       toast.style = Toast.Style.Success;
       toast.title = "Deleted from Hister";
     } catch (error) {
-      toast.style = Toast.Style.Failure;
-      toast.title = "Could not delete";
-      toast.message = error instanceof Error ? error.message : undefined;
+      await showFailureToast(error, { title: "Could not delete" });
     }
   };
 
