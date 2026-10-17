@@ -124,14 +124,7 @@ export function RulesList({
 
   const addRuleActions = (
     <ActionPanel.Section>
-      {tab && !tabAdded && (
-        <Action
-          title={`Add ${tab.host}`}
-          icon={Icon.Plus}
-          shortcut={Keyboard.Shortcut.Common.New}
-          onAction={() => addSite(tab)}
-        />
-      )}
+      {tab && !tabAdded && <Action title={`Add ${tab.host}`} icon={Icon.Plus} onAction={() => addSite(tab)} />}
       {openInHister}
       {openDocs(rulesDocsUrl)}
     </ActionPanel.Section>

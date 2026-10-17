@@ -261,7 +261,6 @@ export default function Command() {
             <Action.Push
               title="Disable Indexing…"
               icon={Icon.EyeDisabled}
-              shortcut={Keyboard.Shortcut.Common.RemoveAll}
               target={<DisableIndexingForm url={result.url} onDone={revalidate} />}
             />
           </ActionPanel.Section>
