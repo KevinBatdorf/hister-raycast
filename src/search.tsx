@@ -13,6 +13,7 @@ import {
   openExtensionPreferences,
   showToast,
   Toast,
+  useNavigation,
 } from "@raycast/api";
 import { showFailureToast, useCachedPromise } from "@raycast/utils";
 import { useEffect, useRef, useState } from "react";
@@ -30,7 +31,7 @@ import {
   webSearchUrl,
 } from "./api";
 import { DisableIndexingForm } from "./disable-indexing";
-import { RulesList } from "./rules-list";
+import { requestAliasForm, RulesList } from "./rules-list";
 import { useCurrentTab } from "./lib/current-tab";
 import { useFavicons } from "./lib/favicons";
 import { previewMarkdown } from "./lib/preview";
@@ -70,6 +71,7 @@ function fallbackIcon(document?: HisterDocument): Image.ImageLike {
 }
 
 export default function Command() {
+  const { push } = useNavigation();
   const [searchText, setSearchText] = useState("");
   const rulesAction = (
     <Action.Push
@@ -80,11 +82,14 @@ export default function Command() {
     />
   );
   const addAliasAction = (
-    <Action.Push
+    <Action
       title="Add Alias"
       icon={Icon.Plus}
       shortcut={Keyboard.Shortcut.Common.New}
-      target={<RulesList onSearch={setSearchText} initialView="aliases" startAddingAlias />}
+      onAction={() => {
+        requestAliasForm();
+        push(<RulesList onSearch={setSearchText} initialView="aliases" />);
+      }}
     />
   );
   const [sort, setSort] = useState("relevance");

@@ -51,14 +51,19 @@ function pages(count: number): string {
   return `${count.toLocaleString()} page${count === 1 ? "" : "s"}`;
 }
 
+// Cleared on first read, so a mount effect that runs twice can't push a second form.
+let aliasFormRequested = false;
+
+export function requestAliasForm() {
+  aliasFormRequested = true;
+}
+
 export function RulesList({
   onSearch,
   initialView = "rules",
-  startAddingAlias = false,
 }: {
   onSearch: (query: string) => void;
   initialView?: "rules" | "aliases";
-  startAddingAlias?: boolean;
 }) {
   const { pop, push } = useNavigation();
   const [view, setView] = useState<string>(initialView);
@@ -131,7 +136,9 @@ export function RulesList({
   );
 
   useEffect(() => {
-    if (startAddingAlias) push(<AddAliasForm onDone={revalidate} />);
+    if (!aliasFormRequested) return;
+    aliasFormRequested = false;
+    push(<AddAliasForm onDone={revalidate} />);
   }, []);
 
   const search = (query: string) => {
