@@ -84,6 +84,52 @@
         ]
       },
       {
+        "input": "@hister what did I read on github.com about Raycast extensions?",
+        "mocks": {
+          "search-pages": {
+            "totalMatches": 1,
+            "pages": [
+              {
+                "title": "raycast/extensions: Everything you need to extend Raycast",
+                "url": "https://github.com/raycast/extensions",
+                "domain": "github.com",
+                "kind": "web page",
+                "lastVisited": "2026-10-09T08:30:00.000Z",
+                "firstIndexed": "2026-09-21T12:05:00.000Z",
+                "visits": 6,
+                "snippet": "Every extension in the Raycast Store, with the docs and tooling to build your own."
+              }
+            ]
+          },
+          "read-page": {
+            "title": "raycast/extensions: Everything you need to extend Raycast",
+            "url": "https://github.com/raycast/extensions",
+            "firstIndexed": "2026-09-21T12:05:00.000Z",
+            "truncated": false,
+            "content": "# raycast/extensions\n\nEvery extension in the Raycast Store lives in this repository, one folder per extension under extensions/. Build yours with npm run dev, then run npm run publish to open a pull request. Raycast's team reviews each pull request before the extension appears in the Store."
+          }
+        },
+        "expected": [
+          {
+            "callsTool": {
+              "name": "search-pages",
+              "arguments": {
+                "query": {
+                  "or": [
+                    {
+                      "includes": "domain:github.com"
+                    },
+                    {
+                      "includes": "site:github.com"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
         "input": "@hister summarize the article I read about passkeys",
         "mocks": {
           "search-pages": {
