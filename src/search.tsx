@@ -108,7 +108,7 @@ export default function Command() {
     [query, sort],
     { execute: query.length > 0, abortable, onError: () => undefined },
   );
-  const { includeHisterSearches } = getPreferenceValues<Preferences.Search>();
+  const { includeHisterSearches } = getPreferenceValues<Preferences>();
   const { data: histerSearches } = useCachedPromise(getRecentSearches, [], {
     execute: includeHisterSearches,
     onError: () => undefined,
