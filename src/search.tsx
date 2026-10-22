@@ -5,6 +5,7 @@ import {
   closeMainWindow,
   confirmAlert,
   Detail,
+  getPreferenceValues,
   Icon,
   Image,
   Keyboard,
@@ -106,12 +107,20 @@ export default function Command() {
     [query, sort],
     { execute: query.length > 0, abortable, onError: () => undefined },
   );
-  const { data: histerSearches } = useCachedPromise(getRecentSearches, [], { onError: () => undefined });
+  const { includeHisterSearches } = getPreferenceValues<Preferences.Search>();
+  const { data: histerSearches } = useCachedPromise(getRecentSearches, [], {
+    execute: includeHisterSearches,
+    onError: () => undefined,
+  });
   const { data: local, revalidate: reloadLocal } = useCachedPromise(getLocalSearches, [], {
     onError: () => undefined,
   });
   const pinnedSearches = local?.pinned ?? [];
-  const recentSearches = mergeRecentSearches([...(local?.recent ?? []), ...(histerSearches ?? [])]).filter(
+  // The cache keeps returning Hister's list after the preference is turned off.
+  const recentSearches = mergeRecentSearches([
+    ...(local?.recent ?? []),
+    ...(includeHisterSearches ? (histerSearches ?? []) : []),
+  ]).filter(
     (recent) =>
       !pinnedSearches.includes(recent.query) && recent.searchedAt > (local?.hidden[recent.query] ?? -Infinity),
   );
@@ -138,7 +147,7 @@ export default function Command() {
   const clearRecentSearches = async () => {
     const confirmed = await confirmAlert({
       title: "Clear recent searches?",
-      message: "They're only hidden in Raycast. Hister keeps its history.",
+      message: includeHisterSearches ? "They're only hidden in Raycast. Hister keeps its history." : undefined,
       primaryAction: { title: "Clear", style: Alert.ActionStyle.Destructive },
     });
     if (confirmed) await updateLocal(hideRecentSearches(recentSearches));
@@ -228,7 +237,10 @@ export default function Command() {
               title="Open in Browser"
               icon={Icon.Globe}
               onAction={async () => {
-                const recorded = recordOpen(query, result.url, result.title).catch(() => undefined);
+                const recorded = Promise.all([
+                  recordOpen(query, result.url, result.title),
+                  saveRecentSearch(query),
+                ]).catch(() => undefined);
                 await open(result.url);
                 await closeMainWindow();
                 await recorded;

@@ -16,7 +16,18 @@
       "title": "Search Hister",
       "subtitle": "Hister",
       "description": "Full-text search over the pages and files your Hister server has indexed.",
-      "mode": "view"
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "includeHisterSearches",
+          "title": "Recent Searches",
+          "label": "Include searches made outside Raycast",
+          "description": "Also list searches you opened a result from in Hister's web page or your browser.",
+          "type": "checkbox",
+          "default": false,
+          "required": false
+        }
+      ]
     }
   ],
   "tools": [
