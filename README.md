@@ -24,7 +24,7 @@ Run a Hister server with its browser extension installed, so it saves the pages 
 
 **Why isn't my search in Recent Searches?**
 
-A search is saved once you've stayed on it for 3 seconds, or when you open a result from it in Raycast or Hister's web page.
+A search is saved once you've stayed on it for 3 seconds, or when you open a result from it. Searches made in Hister's web page or your browser only appear with "Include searches made outside Raycast" turned on in the Search Hister preferences.
 
 **What does the pin icon on a result mean?**
 
