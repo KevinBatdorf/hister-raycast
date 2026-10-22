@@ -12,6 +12,7 @@ import {
   List,
   open,
   openExtensionPreferences,
+  popToRoot,
   showToast,
   Toast,
   useNavigation,
@@ -326,7 +327,15 @@ export default function Command() {
           description={error.message}
           actions={
             <ActionPanel>
-              <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openExtensionPreferences} />
+              <Action
+                title="Open Extension Preferences"
+                icon={Icon.Gear}
+                onAction={async () => {
+                  await openExtensionPreferences();
+                  // An open command keeps its old preferences until it's relaunched.
+                  await popToRoot({ clearSearchBar: true });
+                }}
+              />
               <Action title="Try Again" icon={Icon.ArrowClockwise} onAction={revalidate} />
             </ActionPanel>
           }
